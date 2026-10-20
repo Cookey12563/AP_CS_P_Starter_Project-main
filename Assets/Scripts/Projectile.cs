@@ -5,8 +5,7 @@ public class Projectile : MonoBehaviour
     float speed = 8;
     public Transform target;
     Vector3 target_position;
-    float timer;
-    float time_between_shots = 1.5f;
+    float timer = 1.5f;
 
     private void Start()
     {

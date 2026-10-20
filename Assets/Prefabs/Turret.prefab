@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   fireball_prefab: {fileID: 5790822057519619805, guid: d181d0f6b0e116b4298e1e64b89f707e, type: 3}
-  spawnpoint: {fileID: 52620584586324848, guid: a50a6a5ce72e74852a5b28e22e994fad, type: 3}
+  spawnpoint: {fileID: 2536012521871899095}
 --- !u!61 &-413551147989467404
 BoxCollider2D:
   m_ObjectHideFlags: 0
