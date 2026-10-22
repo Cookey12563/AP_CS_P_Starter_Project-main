@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
 
-    float speed = 4;
+    float speed = 7;
     float xVector;
     float yVector;
     float yDirection;

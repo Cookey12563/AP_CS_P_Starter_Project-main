@@ -2,13 +2,14 @@ using System;
 using UnityEngine;
 using Unity.Mathematics;
 
-public class TurretController : MonoBehaviour
+public class EnemeyController : MonoBehaviour
 {
    [SerializeField]GameObject fireball_prefab;
    [SerializeField]Transform spawnpoint;
     bool inRange = false;
     float timer;
     float time_between_shots = 1.5f;
+    public float speed = 0.01f;
 
     Transform target;
 
@@ -23,21 +24,16 @@ public class TurretController : MonoBehaviour
     {
         if(inRange)
         {
-            timer -= Time.deltaTime;
-
-            if (timer < 0)
-            {
-                Shoot();
-                timer = time_between_shots;
-            }
+            float step = speed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, target.position, step);
         }
     }
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            inRange = true;
             target = other.gameObject.transform;
+            inRange = true;
         }
     }
 
