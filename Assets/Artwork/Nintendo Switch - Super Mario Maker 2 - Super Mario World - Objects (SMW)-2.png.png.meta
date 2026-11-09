@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 221d1c04560ad42a6847c4c5ba9a4655
+guid: 6e889139b79524b03b1e6ba429abfa92
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -749752936116576549
-    second: Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-1.png_0
+      213: -2707004201216130641
+    second: Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-2.png_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -128,13 +128,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-1.png_0
+      name: Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-2.png_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
-        height: 31
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: bde177d4da75895f0800000000000000
-      internalID: -749752936116576549
+      spriteID: fa1c505750ace6ad0800000000000000
+      internalID: -2707004201216130641
       vertices: []
       indices: 
       edges: []
@@ -163,7 +163,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-1.png_0: -749752936116576549
+      Nintendo Switch - Super Mario Maker 2 - Super Mario World - Objects (SMW)-2.png_0: -2707004201216130641
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

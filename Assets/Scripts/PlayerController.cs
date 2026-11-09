@@ -1,123 +1,269 @@
 using System;
+using TMPro;
 using Unity.Mathematics;
+using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-
-    float speed = 7;
-    float xVector;
-    float yVector;
-    float yDirection;
-    float xDirection;
-    bool cooldown;
+    float Speed =4;
+    float xvector;
+    float yvector;
+    float xdirection;
+    float ydirection;
+    Rigidbody2D rb;
     Animator animator;
     SpriteRenderer renderer;
-
-    int coins = 0;
-    int health = 3;
+    int Coins;
+    int health = 5; 
+    bool cooldown = true;
+    float cooldowntimer = 1.5f;
     String facing;
-    int maxHealth = 10;
+    [SerializeField] GameObject player_projectile_prefab;
+    [SerializeField] Transform spawnpoint;
+    [SerializeField] GameObject attack_box;
+     [SerializeField] GameObject currentEnemy;
+     int jumpsRemaining;
+     int maxJumps = 1;
+     [SerializeField] float jumpforce;
+     bool isPlatformer = false;
+
+
 
     private void Start()
     {
-     animator = GetComponentInChildren<Animator>(); 
-     renderer = GetComponentInChildren<SpriteRenderer>(); 
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
+        renderer = GetComponentInChildren<SpriteRenderer>();
+        Scene currentScene = SceneManager.GetActiveScene();
+       if (currentScene.name == "Overworld")
+        {
+            rb.gravityScale = 0;
+            isPlatformer = false;
+
+        }
+        else
+        {
+            rb.gravityScale = 1;
+            isPlatformer = true; 
+            jumpsRemaining = maxJumps;
+            print (jumpsRemaining);
+        }
+
     }
 
     private void Update()
     {
-        // get input
-       xDirection = Input.GetAxisRaw("Horizontal");
-       yDirection = Input.GetAxisRaw("Vertical");
-       //apply movment using vector
-       xVector = xDirection * speed * Time.deltaTime;
-       yVector = yDirection * speed * Time.deltaTime;
-       transform.position += new Vector3 (xVector, yVector, 0);
-       AninationUpdate();
-    }
-    private void AninationUpdate()
-    {
-        bool ismoving = xVector != 0 || yVector != 0;
-        animator.SetBool("IsWalking", ismoving);
-        if (Mathf.Abs(xVector) > Mathf.Abs(yVector))
+       // get input
+       xdirection = Input.GetAxisRaw("Horizontal");
+       ydirection = Input.GetAxisRaw("Vertical");
+       //assign vector
+       xvector = xdirection * Speed * Time.deltaTime;
+       yvector = ydirection * Speed * Time.deltaTime;
+       //Position
+       transform.position += new Vector3 (xvector,yvector,0);
+        //rb.MovePosition( transform.position + new Vector3(xvector,yvector,0));
+       AnimationUpdate();
+
+        if (xdirection>0)
         {
-            animator.SetInteger ("WalkDir",1);
+            facing = "Right";
+            attack_box.transform.position = transform.position + new Vector3 (.5f, .5f, 0);
+
         }
-        if (xVector > 0)
+            else if (xdirection<0)
+             {
+            
+            facing = "Left";
+            attack_box.transform.position = transform.position + new Vector3 (-.5f, .5f, 0);
+            }
+        if (ydirection>0)
         {
-            renderer.flipX = true;
+            facing = "Up";
+            attack_box.transform.position = transform.position + new Vector3 (0, 1.5f, 0);
         }
-        else if (xVector < 0)
+        else if (ydirection<0)
         {
-            renderer.flipX = false;
+            facing = "Down";
+            attack_box.transform.position = transform.position + new Vector3 (0, 0, 0);
         }
-        else if (yVector > 0)
+       if (Input.GetKeyDown(KeyCode.Space) &&  cooldown)
         {
-            animator.SetInteger ("WalkDir",0);
-        }
-        else if (yVector < 0)
+            shoot();
+            cooldowntimer=.5f;
+
+        }      
+
+         if (Input.GetKeyDown(KeyCode.E) && currentEnemy != null)
+            {
+                Hit();
+                cooldowntimer=.5f;
+            }
+        if (!isPlatformer)
         {
-            animator.SetInteger ("WalkDir",2);
+            rb.linearVelocity = new Vector2 (xvector, yvector);
+
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.J) && jumpsRemaining>=1)
+            {
+                rb.AddForceY(jumpforce, ForceMode2D.Impulse);
+                jumpsRemaining -= 1;
+                
+            }
+         rb.linearVelocityX = xvector;
+        }
+
     }
 
 
-    void OnTriggerEnter2D(Collider2D other)
+
+    void OnTriggerEnter2D (Collider2D other)
     {
+       
+       
+       
         if(other.gameObject.CompareTag("Coin"))
         {
-            ChangeCoins(1);
-            Destroy(other.gameObject);
+           // Coins = Coins + 1;
+           ChangeCoins (1);
+            Destroy (other.gameObject);
+            //print ("You have " + Coins + " coins");
+        }
+        if (other.gameObject.CompareTag("Health Potion"))
+        {
+            
+            if (health <= 4)
+            {
+                Destroy (other.gameObject);
+               ChangeHealth (1);
+            }
+            else if (health >= 5)
+            {
+                print ("You have max health");
+            }
         }
 
-        if(other.gameObject.CompareTag("Health_Potion"))
+        if (other.gameObject.CompareTag("E_Fireball"))
         {
-            ChangeHealth(1);
-            Destroy(other.gameObject);
+            ChangeHealth (-2);
+             
         }
 
-        if(other.gameObject.CompareTag("E_Fireball"))
-        {
-            ChangeHealth(-1);
-            Destroy(other.gameObject);
-        }
     }
-
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.CompareTag("Spikes"))
+       if (other.gameObject.CompareTag("Spikes"))
         {
-             ChangeHealth(-1);
+            ChangeHealth (-1);
+            
+             
+        }
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            
+            currentEnemy = other.gameObject;
+           
+
+        }
+        if(other.gameObject.CompareTag("Ground"))
+        {
+            jumpsRemaining = maxJumps;
+        
+
+        }
+
+
+
+
+    }
+    void Hit()
+    {
+    
+        currentEnemy.GetComponent<EnemyController>().ChangeHealth(-1);
+    
+
+    }
+    public void ChangeCoins (int Amount)
+    {
+        Coins = Coins + Amount;
+        print ("You have " + Coins + " Coins ");
+
+
+    }
+    void Die (int Amount)
+    {
+      print ("You Died");  
+
+    }
+
+
+void ChangeHealth (int Amount)
+    {
+        health = health + Amount;
+    
+     if (health <= 0)
+            {
+                Die (1);
+                //print ("You Died");
+                health = 5;
+                ChangeCoins (- Coins/2);
+            }  
+            else if (health >= 1)
+                {
+                    print ("You have " + health + " health remaining");
+                }
+
+
+    }
+
+public void shoot ()
+    {
+        GameObject player_projectile_copy = Instantiate(player_projectile_prefab, transform.position, quaternion.identity);
+        PlayerProjectile projectile_script = player_projectile_copy.GetComponent <PlayerProjectile>();
+        projectile_script.SetDirection(facing);
+
+
+    }
+
+
+
+
+
+    private void AnimationUpdate()    
+    {
+        bool ismoving = xvector != 0 || yvector != 0;
+        animator . SetBool ("IsWalking" , ismoving);
+
+        if (Mathf.Abs(xvector) > Mathf.Abs(yvector))
+        {
+            animator.SetInteger("WalkDir" , 1);
+
+            if (xvector>0)
+            {
+                renderer.flipX = true;
+            }
+            else if (xvector<0)
+            {
+                renderer.flipX = false;
+            }
+        }
+        else if (yvector > 0)
+        {
+            animator.SetInteger("WalkDir",0);
+        }
+        else if (yvector < 0)
+        {
+            animator.SetInteger("WalkDir",2);
         }
         
     }
+    
+   
+    
 
-    void ChangeHealth(int amount)
-    {
-        health += amount;
-        if(health<1)
-        {
-            Die();
-        }
-        if(health > maxHealth)
-        {
-            health = maxHealth;
-        }
-        print("Health: " + health);
-    }
-
-    void ChangeCoins(int amount)
-    {
-        coins += amount;
-        print("Coins: " + coins);
-    }
-
-    void Die()
-    {
-        print("you died");
-    }
-
-
+   
 }

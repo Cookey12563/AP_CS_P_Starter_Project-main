@@ -10,9 +10,10 @@ TagManager:
   - Spikes
   - Ground
   - GroundCheck
-  - Health_Potion
-  - FireBall
+  - Health Potion
   - E_Fireball
+  - Fireball
+  - Cave Trigger
   layers:
   - Default
   - TransparentFX
@@ -45,7 +46,7 @@ TagManager:
   - 
   - 
   - 
-  - d
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

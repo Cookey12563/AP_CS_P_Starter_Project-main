@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4281311786053241907}
-  - component: {fileID: -732577121385505370}
+  - component: {fileID: -3254880301004597055}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Coin
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 684691632065716155}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &-732577121385505370
+--- !u!58 &-3254880301004597055
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -68,7 +68,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.2
 --- !u!1 &5963870348015840586
 GameObject:
   m_ObjectHideFlags: 0
