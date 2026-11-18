@@ -13,8 +13,6 @@ public class MovingPlatform2D : MonoBehaviour
     void Update()
     {
         if (!isON || waypoints.Count == 0) return;
-
-        // Move via basic Transform (works even if Rigidbody settings are messed up)
         Vector2 targetPosition = waypoints[waypointIndex].position;
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
